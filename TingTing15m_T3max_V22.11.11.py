@@ -527,7 +527,7 @@ def long_beard_candle_bull(position_index, coin_name, timeframe):
     low   = price[3].astype(float)
     close = price[4].astype(float)
 
-    if ((min(open[position_index],low[position_index])) > (low[position_index]+(5*(high[position_index]-low[position_index])/8))):
+    if ((min(open[position_index],close[position_index])) > (low[position_index]+(5*(high[position_index]-low[position_index])/8))):
       return 1
     else:
       return 0
@@ -548,7 +548,7 @@ def long_beard_candle_bear(position_index, coin_name, timeframe):
     low   = price[3].astype(float)
     close = price[4].astype(float)
 
-    if ((max(open[position_index],low[position_index])) < (high[position_index]-(5*(high[position_index]-low[position_index])/8))):
+    if ((max(open[position_index],close[position_index])) < (high[position_index]-(5*(high[position_index]-low[position_index])/8))):
       return 1
     else:
       return 0

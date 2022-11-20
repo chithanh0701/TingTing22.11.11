@@ -36,8 +36,9 @@ user_id = 1944995901
 
 #input:
 List1 = []
-List1_0 = ['SOL/USDT','AVAX/USDT',
-           'LUNA/USDT','RSR/USDT','DOGE/USDT','JASMY/USDT','VET/USDT','LINA/USDT','XRP/USDT','STMX/USDT','1000SHIB/USDT','HOT/USDT']
+List1_0 = []
+# List1_0 = ['SOL/USDT','AVAX/USDT','TRX/USDT','PEOPLE/USDT','1000SHIB/USDT','HOT/USDT',
+#            'LUNA/USDT','RSR/USDT','DOGE/USDT','JASMY/USDT','VET/USDT','LINA/USDT','XRP/USDT','STMX/USDT']
 
 #Đã chạm 2 đầu:
 List2 = []
@@ -246,8 +247,10 @@ def touch_bollinger_middle(coin_name, timeframe):
   bollinger_middle, high_1m, low_1m, atr = load_dataT_M(coin_name, timeframe)
   if ((low_1m - atr/3) < bollinger_middle) and ((high_1m  + atr/3) > bollinger_middle):
     MMbot_send_message(user_id, text=f'{coin_name.replace("/USDT","")} https://www.binance.com/vi/futures/{coin_name.replace("/","")}')
-    List2_0.append(coin_name)
-    List2_1.append(coin_name)
+    if (List2_0.count(coin_name) == 0):
+      List2_0.append(coin_name)
+    if (List2_1.count(coin_name) == 0):    
+      List2_1.append(coin_name)
 
 
 ##############################################

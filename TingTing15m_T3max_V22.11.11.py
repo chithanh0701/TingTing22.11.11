@@ -44,6 +44,7 @@ List1_0 = []
 List2 = []
 List2_0 = []  # Đã chạm BB Middle
 List2_1 = []
+List2_1_0 = []
 #Đã chạm giữa -> đọc nến
 List3 = []
 
@@ -562,11 +563,10 @@ def long_beard_candle_bear(position_index, coin_name, timeframe):
 
 
 def AT3MAX(coin_name, timeframe):  
-  global List2_1                         
+  global List2_1_0                         
   if (long_beard_candle_bull(6, coin_name, timeframe)):
     if (long_beard_candle_bull(5, coin_name, timeframe)|long_beard_candle_bull(4, coin_name, timeframe)|long_beard_candle_bull(3, coin_name, timeframe)|long_beard_candle_bull(2, coin_name, timeframe)):
-      if List2_1.count(coin_name)>0:
-        List2_1.remove(coin_name)
+      List2_1_0.append(coin_name)
       T3MAX_bot_send_message(user_id, text=f'{coin_name.replace("/USDT","")} {timeframe} T3MAX BULL https://www.binance.com/vi/futures/{coin_name.replace("/","")}')
 
 
@@ -574,8 +574,7 @@ def AT3MAX(coin_name, timeframe):
 
   if (long_beard_candle_bear(6, coin_name, timeframe)):
     if (long_beard_candle_bear(5, coin_name, timeframe)|long_beard_candle_bear(4, coin_name, timeframe)|long_beard_candle_bear(3, coin_name, timeframe)|long_beard_candle_bear(2, coin_name, timeframe)):
-      if List2_1.count(coin_name)>0:
-        List2_1.remove(coin_name)
+      List2_1_0.append(coin_name)
       T3MAX_bot_send_message(user_id, text=f'{coin_name.replace("/USDT","")} {timeframe} T3MAX BEAR https://www.binance.com/vi/futures/{coin_name.replace("/","")}')
 
 
@@ -593,12 +592,20 @@ def T3MAX_5m():
   global List2_1
   for i in range(len(List2_1)):
     AT3MAX(List2_1[i], '5m')
+  for i in range(len(List2_1_0)):
+    if (List2_1.count(List2_1_0[i]) > 0):
+      List2_1.remove(List2_1_0[i])
+  List2_1_0.clear()
 
 def T3MAX_15m():
   global List2_1
   for i in range(len(List2_1)):
     AT3MAX(List2_1[i], '15m')
-
+  for i in range(len(List2_1_0)):
+    if (List2_1.count(List2_1_0[i]) > 0):
+      List2_1.remove(List2_1_0[i])
+  List2_1_0.clear()
+  
 
 ##############################################
 # Main Functions
@@ -719,7 +726,7 @@ def add_remove(update: Update, context: CallbackContext) -> None:
   else:
     TTbot_send_message(user_id, text=f'Resend according to form: "Add 3 btc"')
 
-    
+
 ##############################################
 
 def show_list(update: Update, context: CallbackContext) -> None:

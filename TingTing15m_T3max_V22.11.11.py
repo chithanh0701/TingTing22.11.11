@@ -628,10 +628,10 @@ def tingting():
 
   schedule.every().hour.at("03:26").do(T3MAX_1H)
 
-  schedule.every().day.at("07:01").do(T3MAX_4H)
-  schedule.every().day.at("11:01").do(T3MAX_4H)
-  schedule.every().day.at("15:01").do(T3MAX_4H)
-  schedule.every().day.at("19:01").do(T3MAX_4H)
+  schedule.every().day.at("08:01").do(T3MAX_4H)
+  schedule.every().day.at("12:01").do(T3MAX_4H)
+  schedule.every().day.at("16:01").do(T3MAX_4H)
+  schedule.every().day.at("20:01").do(T3MAX_4H)
 
   schedule.every().hour.at("00:05").do(T3MAX_5m)
   schedule.every().hour.at("05:05").do(T3MAX_5m)

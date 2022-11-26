@@ -557,12 +557,12 @@ def a_T3max(coin_name, timeframe, vol_condition):
 def T3MAX_1H():
   global List1
   for i in range(len(List1)):
-    a_T3max(List1[i], '1h', 1)
+    a_T3max(List1[i], '1h', 0)
 
 def T3MAX_4H():
   global List1
   for i in range(len(List1)):
-    a_T3max(List1[i], '4h', 1)
+    a_T3max(List1[i], '4h', 0)
 
 # def T3MAX_5m():
 #   global List2_1

@@ -527,30 +527,30 @@ def a_T3max(coin_name, timeframe, vol_condition):
     binance = ccxt.binanceusdm()
     price = binance.fetch_ohlcv(coin_name,timeframe,limit=22)  
   finally:
-    price    = pd.DataFrame(price)
-    vol      = price[0].astype(float)
-    open     = price[1].astype(float)
-    high     = price[2].astype(float)
-    low      = price[3].astype(float)
-    close    = price[4].astype(float)
-    bull     = price[5].astype(float)
-    bear     = price[6].astype(float)
+    price     = pd.DataFrame(price)
+    vol       = price[0].astype(float)
+    open      = price[1].astype(float)
+    high      = price[2].astype(float)
+    low       = price[3].astype(float)
+    close     = price[4].astype(float)
+    bull_bear = price[5].astype(int)
     vol_ma20 = (sum(vol) - vol[21])/21
 
     for position_index in range(21):
+      bull_bear[position_index] = 0
       if ((min(open[position_index],close[position_index])) > (low[position_index]+(5*(high[position_index]-low[position_index])/8))):
-        bull[position_index] = 1
+        bull_bear[position_index] = 1
       if ((max(open[position_index],close[position_index])) < (high[position_index]-(5*(high[position_index]-low[position_index])/8))):
-        bear[position_index] = 1
+        bull_bear[position_index] = -1
 
-    if ((bull[20] == 1) and ((vol_condition == 0) or (vol[20] > 1.5*vol_ma20))):
+    if ((bull_bear[20] == 1) and ((vol_condition == 0) or (vol[20] > 1.5*vol_ma20))):
       for i in range(1, 6):
-        if (bull[20-i] == 1) and (max(open[20], close[20]) > min(open[20-i], close[20-i])) and (low[20] < high[20-i]):     
+        if (bull_bear[20-i] == 1) and (max(open[20], close[20]) > min(open[20-i], close[20-i])) and (low[20] < high[20-i]):     
           T3MAX_bot_send_message(user_id, text=f'{coin_name.replace("/USDT","")} {timeframe} T3MAX BULL https://www.binance.com/vi/futures/{coin_name.replace("/","")}')
 
-    if ((bear[20] == 1) and ((vol_condition == 0) or (vol[20] > 1.5*vol_ma20))):
+    if ((bull_bear[20] == -1) and ((vol_condition == 0) or (vol[20] > 1.5*vol_ma20))):
       for i in range(1, 6):
-        if (bear[20-i] == 1) and (min(open[20], close[20]) < max(open[20-i], close[20-i])) and (high[20] > low[20-i]):     
+        if (bull_bear[20-i] == -1) and (min(open[20], close[20]) < max(open[20-i], close[20-i])) and (high[20] > low[20-i]):     
           T3MAX_bot_send_message(user_id, text=f'{coin_name.replace("/USDT","")} {timeframe} T3MAX BEAR https://www.binance.com/vi/futures/{coin_name.replace("/","")}')
 
 

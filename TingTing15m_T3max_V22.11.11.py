@@ -728,6 +728,8 @@ TingTing()
 thread1 = threading.Thread(target= tingting, args=())
 thread1.start()
 
+
+
 updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'Add') | Filters.regex(r'Remove'), add_remove))
 updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'List'), show_list))
 updater.start_polling()

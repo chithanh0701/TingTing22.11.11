@@ -528,13 +528,13 @@ def a_T3max(coin_name, timeframe, vol_rate):
     price = binance.fetch_ohlcv(coin_name,timeframe,limit=22)  
   finally:
     price     = pd.DataFrame(price)
-    vol       = price[0].astype(float)
+    bull_bear = price[0].astype(int)
     open      = price[1].astype(float)
     high      = price[2].astype(float)
     low       = price[3].astype(float)
     close     = price[4].astype(float)
-    bull_bear = price[5].astype(int)
-    vol_ma20 = (sum(vol) - vol[21])/21
+    vol       = price[5].astype(float)
+    vol_ma20  = (sum(vol) - vol[21])/21
 
     for position_index in range(21):
       bull_bear[position_index] = 0
@@ -557,12 +557,12 @@ def a_T3max(coin_name, timeframe, vol_rate):
 def T3MAX_1H():
   global List1
   for i in range(len(List1)):
-    a_T3max(List1[i], '1h', 1)
+    a_T3max(List1[i], '1h', 1.5)
 
 def T3MAX_4H():
   global List1
   for i in range(len(List1)):
-    a_T3max(List1[i], '4h', 1)
+    a_T3max(List1[i], '4h', 1.5)
 
 
 def T3MAX_15m():
@@ -607,6 +607,7 @@ def tingting():
 
 
   schedule.every().hour.at("03:26").do(T3MAX_1H)
+
   schedule.every().day.at("08:01").do(T3MAX_4H)
   schedule.every().day.at("12:01").do(T3MAX_4H)
   schedule.every().day.at("16:01").do(T3MAX_4H)
@@ -730,7 +731,6 @@ def TingTing():
 TingTing()
 thread1 = threading.Thread(target= tingting, args=())
 thread1.start()
-
 
 updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'Add') | Filters.regex(r'Remove'), add_remove))
 updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'List'), show_list))

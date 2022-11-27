@@ -517,7 +517,7 @@ def check():
 # T3MAX Module
 ##############################################
 
-def a_T3max(coin_name, timeframe, vol_condition):
+def a_T3max(coin_name, timeframe, vol_rate):
   price = np.zeros((22,8), dtype = float)
   try:
     binance = ccxt.binanceusdm()
@@ -543,12 +543,12 @@ def a_T3max(coin_name, timeframe, vol_condition):
       if ((max(open[position_index],close[position_index])) < (high[position_index]-(5*(high[position_index]-low[position_index])/8))):
         bull_bear[position_index] = -1
 
-    if ((bull_bear[20] == 1) and ((vol_condition == 0) or (vol[20] > 1.5*vol_ma20))):
+    if ((bull_bear[20] == 1) and (vol[20] > vol_rate*vol_ma20)):
       for i in range(1, 6):
         if (bull_bear[20-i] == 1) and (max(open[20], close[20]) > min(open[20-i], close[20-i])) and (low[20] < high[20-i]):     
           T3MAX_bot_send_message(user_id, text=f'{coin_name.replace("/USDT","")} {timeframe} T3MAX BULL https://www.binance.com/vi/futures/{coin_name.replace("/","")}')
 
-    if ((bull_bear[20] == -1) and ((vol_condition == 0) or (vol[20] > 1.5*vol_ma20))):
+    if ((bull_bear[20] == -1) and (vol[20] > vol_rate*vol_ma20)):
       for i in range(1, 6):
         if (bull_bear[20-i] == -1) and (min(open[20], close[20]) < max(open[20-i], close[20-i])) and (high[20] > low[20-i]):     
           T3MAX_bot_send_message(user_id, text=f'{coin_name.replace("/USDT","")} {timeframe} T3MAX BEAR https://www.binance.com/vi/futures/{coin_name.replace("/","")}')
@@ -557,12 +557,19 @@ def a_T3max(coin_name, timeframe, vol_condition):
 def T3MAX_1H():
   global List1
   for i in range(len(List1)):
-    a_T3max(List1[i], '1h', 0)
+    a_T3max(List1[i], '1h', 1)
 
 def T3MAX_4H():
   global List1
   for i in range(len(List1)):
-    a_T3max(List1[i], '4h', 0)
+    a_T3max(List1[i], '4h', 1)
+
+
+def T3MAX_15m():
+  global List1
+  for i in range(len(List1)):
+    a_T3max(List1[i], '15m', 1.5)
+
 
 # def T3MAX_5m():
 #   global List2_1
@@ -599,11 +606,7 @@ def tingting():
 
 
 
-
-
-
   schedule.every().hour.at("03:26").do(T3MAX_1H)
-
   schedule.every().day.at("08:01").do(T3MAX_4H)
   schedule.every().day.at("12:01").do(T3MAX_4H)
   schedule.every().day.at("16:01").do(T3MAX_4H)
@@ -622,10 +625,10 @@ def tingting():
   # schedule.every().hour.at("50:05").do(T3MAX_5m)
   # schedule.every().hour.at("55:05").do(T3MAX_5m)
 
-  # schedule.every().hour.at("00:30").do(T3MAX_15m)
-  # schedule.every().hour.at("15:30").do(T3MAX_15m)
-  # schedule.every().hour.at("30:30").do(T3MAX_15m)
-  # schedule.every().hour.at("45:30").do(T3MAX_15m)
+  schedule.every().hour.at("00:30").do(T3MAX_15m)
+  schedule.every().hour.at("15:30").do(T3MAX_15m)
+  schedule.every().hour.at("30:30").do(T3MAX_15m)
+  schedule.every().hour.at("45:30").do(T3MAX_15m)
 
 
 
@@ -729,9 +732,7 @@ thread1 = threading.Thread(target= tingting, args=())
 thread1.start()
 
 
-
 updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'Add') | Filters.regex(r'Remove'), add_remove))
 updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'List'), show_list))
 updater.start_polling()
 updater.idle()
-
